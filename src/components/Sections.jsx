@@ -38,8 +38,21 @@ export function NavBar() {
       >
         <a href="#top" className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/[0.03]">
-            <img src="/vaultprint-logo-mark.png" alt="" className="h-full w-full object-cover" />
+            <picture className="contents">
+              <source srcSet="/vaultprint-logo-mark.avif" type="image/avif" />
+              <source srcSet="/vaultprint-logo-mark.webp" type="image/webp" />
+              <img
+                src="/vaultprint-logo-mark.png"
+                alt=""
+                width="158"
+                height="158"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </picture>
+
           </span>
+
           <span className="font-display text-lg font-semibold tracking-tight text-white">VaultPrint</span>
         </a>
 
@@ -119,29 +132,41 @@ export function Hero() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let raf = 0;
+    let running = false;
     const state = { tx: 0, ty: 0, rx: 0, ry: 0, cx: 0, cy: 0 };
     const target = { tx: 0, ty: 0, rx: 0, ry: 0, cx: 0, cy: 0 };
 
+    // Cache the scene rect (batched READ) instead of measuring every mousemove.
+    // This eliminates layout thrashing / forced reflows on the pointer path.
+    let rect = scene.getBoundingClientRect();
+    const measure = () => { rect = scene.getBoundingClientRect(); };
+    window.addEventListener("resize", measure, { passive: true });
+    window.addEventListener("scroll", measure, { passive: true });
+
     const onMove = (e) => {
-      const r = scene.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5; // -0.5..0.5
-      const py = (e.clientY - r.top) / r.height - 0.5;
+      const px = (e.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
       target.tx = px * 40; // image drift px
       target.ty = py * 26;
       target.ry = px * 10; // tilt deg
       target.rx = -py * 8;
       target.cx = px * -60; // rings counter-drift
       target.cy = py * -40;
+      if (!running) { running = true; raf = requestAnimationFrame(tick); }
     };
 
     const onLeave = () => {
       target.tx = target.ty = target.rx = target.ry = target.cx = target.cy = 0;
+      if (!running) { running = true; raf = requestAnimationFrame(tick); }
     };
 
+    // Pure WRITE loop — only transforms, never reads layout. Auto-parks when idle.
     const tick = () => {
       const k = 0.08;
+      let moving = false;
       for (const key of Object.keys(state)) {
         state[key] += (target[key] - state[key]) * k;
+        if (Math.abs(target[key] - state[key]) > 0.01) moving = true;
       }
       if (imgRef.current) {
         imgRef.current.style.transform = `translate3d(${state.tx}px, ${state.ty}px, 0) rotateX(${state.rx}deg) rotateY(${state.ry}deg)`;
@@ -152,19 +177,25 @@ export function Hero() {
       if (glowRef.current) {
         glowRef.current.style.transform = `translate3d(${state.tx * 0.6}px, ${state.ty * 0.6}px, 0)`;
       }
-      raf = requestAnimationFrame(tick);
+      if (moving) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        running = false; // park the loop when settled — saves battery/CPU
+      }
     };
 
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     scene.addEventListener("mouseleave", onLeave);
-    raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure);
       scene.removeEventListener("mouseleave", onLeave);
     };
   }, []);
+
 
   return (
     <section
@@ -236,14 +267,26 @@ export function Hero() {
 
       {/* -------- Interactive printer — height-constrained so it fits without page overflow -------- */}
       <div className="pointer-events-none relative z-10 -mt-8 flex w-full min-h-0 flex-1 items-center justify-center overflow-hidden [transform-style:preserve-3d]">
-        <img
-          ref={imgRef}
-          src="/vaultprint-kiosk.png"
-          alt="VaultPrint secure print kiosk"
-          className="h-full w-auto min-w-[640px] max-w-none select-none object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.65)] will-change-transform"
-          draggable={false}
-        />
+        <picture className="contents">
+          <source srcSet="/vaultprint-kiosk.avif" type="image/avif" />
+          <source srcSet="/vaultprint-kiosk.webp" type="image/webp" />
+          <img
+            ref={imgRef}
+            src="/vaultprint-kiosk.png"
+
+            alt="VaultPrint secure print kiosk"
+            width="1536"
+            height="1024"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+            className="h-full w-auto min-w-[640px] max-w-none select-none object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.65)] will-change-transform"
+            draggable={false}
+          />
+        </picture>
+
       </div>
+
 
 
       {/* -------- Live spec ticker docked at the base -------- */}

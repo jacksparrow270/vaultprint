@@ -55,12 +55,39 @@
 
 
     <!-- ============ FONTS ============ -->
+    <!-- Preload the two most-used font weights to eliminate FOUT -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter+Tight:wght@600;700&display=swap"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- ============ LCP PRELOAD — hero kiosk image ============ -->
+    <!-- Preload the AVIF the browser will actually render; fetchpriority=high
+         moves it ahead of other requests for the fastest possible LCP. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/vaultprint-kiosk.avif"
+      type="image/avif"
+      fetchpriority="high"
+    />
+
+
 
     <!-- ============ STRUCTURED DATA (JSON-LD) ============
          A single connected @graph so Google resolves the WebSite → Organization
