@@ -4,23 +4,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: "#F8FAFC",
-        vault: "#0F172A",
-        ink: "#1E293B",
-        muted: "#64748B",
-        tech: {
-          DEFAULT: "#3B82F6",
-          hover: "#2563EB",
-        },
-        secure: "#10B981",
+        // Base
+        void: "#000000",
+        titanium: "#0A0A0C",
+        // Surface
+        obsidian: "rgba(20, 20, 22, 0.6)",
+        // Type
+        ash: "#8A8A93",
+        // Accent — The Laser
+        laser: "#00F0FF",
       },
       fontFamily: {
-        sans: ['"Inter"', '"Plus Jakarta Sans"', "system-ui", "sans-serif"],
-        display: ['"Plus Jakarta Sans"', '"Inter"', "system-ui", "sans-serif"],
+        sans: ['"Inter Tight"', "system-ui", "sans-serif"],
+        display: ['"Inter Tight"', "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
-      boxShadow: {
-        glow: "0 24px 70px rgba(59, 130, 246, 0.16)",
-        soft: "0 18px 45px rgba(15, 23, 42, 0.08)",
+      letterSpacing: {
+        tightest: "-0.04em",
+        tighter2: "-0.055em",
+      },
+      transitionTimingFunction: {
+        spring: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        expo: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
     },
   },

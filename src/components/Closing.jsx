@@ -1,0 +1,368 @@
+import { useRef, useState } from "react";
+import { ArrowUpRight, Check } from "lucide-react";
+import { MagneticButton } from "./Primitives";
+
+/* =====================================================================
+   SCENE 6 — DEPLOYMENT & OPERATIONS / THE HaaS MODEL
+   Linear-style radial glow border that tracks the cursor.
+===================================================================== */
+const PLANS = [
+  {
+    tag: "Direct Kiosk Purchase",
+    title: "Own the infrastructure.",
+    price: "Capex",
+    priceNote: "One-time acquisition · you hold the asset",
+    body: "Purchase the VaultPrint kiosk outright for complete ownership. Built for high-volume campuses and enterprises optimizing long-term cost-per-page.",
+    features: [
+      "Full hardware ownership & asset control",
+      "On-prem or air-gapped deployment options",
+      "Optional annual firmware & security retainer",
+      "Cost-per-page optimized for heavy load",
+    ],
+    cta: "Request a Quote",
+    highlight: false,
+  },
+  {
+    tag: "Hardware-as-a-Service",
+    title: "Deploy with zero capital outlay.",
+    price: "Opex",
+    priceNote: "Predictable monthly subscription · fully managed",
+    body: "Zero upfront hardware cost. A single monthly rate covers the kiosk, firmware updates, monitoring, consumables logistics, and on-site maintenance.",
+    features: [
+      "No upfront hardware investment",
+      "Remote monitoring & signed OTA updates",
+      "SLA-backed maintenance & consumables",
+      "Scale kiosks up or down per term",
+    ],
+    cta: "Start Deployment",
+    highlight: true,
+  },
+];
+
+function GlowCard({ plan }) {
+  const ref = useRef(null);
+
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      data-cursor="hover"
+      className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#08080a] p-8 transition-colors duration-500 md:p-10"
+    >
+      {/* Cursor-tracking radial glow on border + surface */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(420px circle at var(--mx) var(--my), rgba(0,240,255,0.14), transparent 42%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(320px circle at var(--mx) var(--my), rgba(0,240,255,0.55), transparent 40%)",
+          WebkitMask:
+            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          padding: "1px",
+        }}
+      />
+
+      <div className="relative">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-laser">
+            {plan.tag}
+          </span>
+          {plan.highlight && (
+            <span className="rounded-full border border-laser/30 bg-laser/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-laser">
+              Most deployed
+            </span>
+          )}
+        </div>
+
+        <h3 className="mt-6 font-display text-3xl font-semibold tracking-hero text-white">
+          {plan.title}
+        </h3>
+
+        <div className="mt-5 flex items-baseline gap-3">
+          <span className="font-display text-4xl font-semibold tracking-tight text-white">
+            {plan.price}
+          </span>
+          <span className="text-sm text-ash">{plan.priceNote}</span>
+        </div>
+
+        <p className="mt-5 text-sm leading-relaxed text-ash">{plan.body}</p>
+
+        <ul className="mt-7 space-y-3">
+          {plan.features.map((f) => (
+            <li key={f} className="flex items-start gap-3 text-sm text-white/85">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-laser" />
+              {f}
+            </li>
+          ))}
+        </ul>
+
+        <MagneticButton
+          href="#deploy-contact"
+          strength={0.35}
+          className={`mt-9 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold tracking-tight transition-colors duration-300 ${
+            plan.highlight
+              ? "bg-white text-black hover:bg-laser"
+              : "border border-white/15 bg-white/[0.03] text-white hover:border-laser/40 hover:text-laser"
+          }`}
+        >
+          {plan.cta}
+          <ArrowUpRight className="h-4 w-4" />
+        </MagneticButton>
+      </div>
+    </div>
+  );
+}
+
+export function Deploy() {
+  return (
+    <section id="deploy" className="relative bg-titanium py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="max-w-3xl">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-laser">
+            [ 04 — Deployment & operations ]
+          </p>
+          <h2 className="mt-5 font-display text-4xl font-semibold leading-[1.02] tracking-hero text-white sm:text-5xl">
+            Two paths to production. Both fully managed.
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-ash">
+            Own the hardware or subscribe to it. Either way, VaultPrint handles firmware,
+            monitoring, and field service so your team never touches a toner cartridge.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-5 lg:grid-cols-2">
+          {PLANS.map((p) => (
+            <GlowCard key={p.tag} plan={p} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =====================================================================
+   SCENE 7 — THE ENGINEERS / REDEFINED ABOUT
+   Editorial brutalist grid, B&W → color + credentials on hover.
+===================================================================== */
+const ENGINEERS = [
+  {
+    name: "Atharva Shrivastava",
+    role: "Systems Integration",
+    image: "/founder-operations-lead.png",
+    index: "01",
+    credentials: [
+      ["Focus", "Hardware ↔ web-app integration"],
+      ["Domain", "Deployment & workflow automation"],
+      ["Signal", "Launchpad Grant · lead"],
+    ],
+    bio: "Architects the hardware-to-software pipeline behind every VaultPrint kiosk — from secure boot to fleet deployment.",
+  },
+  {
+    name: "Satyam Pandey",
+    role: "Hardware Architecture",
+    image: "/founder-strategy-lead.png",
+    index: "02",
+    credentials: [
+      ["Focus", "Systems strategy & scaling"],
+      ["Domain", "Data analytics · operations"],
+      ["Signal", "Corporate & non-profit ops"],
+    ],
+    bio: "Owns the operational and analytical spine of VaultPrint, engineering the models that let the fleet scale sustainably.",
+  },
+];
+
+function EngineerCard({ eng }) {
+  return (
+    <article
+      data-cursor="hover"
+      className="group relative flex gap-5 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#08080a] p-5 transition-colors duration-500 hover:border-laser/20 sm:gap-6 sm:p-6"
+    >
+      {/* Compact portrait */}
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 sm:h-28 sm:w-28">
+        <img
+          src={eng.image}
+          alt={`${eng.name} — ${eng.role}`}
+          className="h-full w-full object-cover grayscale contrast-110 brightness-[0.85] transition-all duration-700 ease-expo group-hover:scale-[1.04] group-hover:grayscale-0 group-hover:brightness-100"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+      </div>
+
+      {/* Detail column */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-white/50">
+            {eng.index}
+          </span>
+          <span className="h-px w-6 bg-laser" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-laser">
+            {eng.role}
+          </span>
+        </div>
+
+        <h3 className="mt-2 font-display text-xl font-semibold tracking-hero text-white">
+          {eng.name}
+        </h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-ash">{eng.bio}</p>
+
+        {/* Credentials — reveal on hover */}
+        <dl className="mt-4 grid max-h-0 grid-cols-1 gap-1 overflow-hidden border-l border-white/10 pl-3 font-mono text-[10px] opacity-0 transition-all duration-500 ease-expo group-hover:max-h-40 group-hover:opacity-100">
+          {eng.credentials.map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-4">
+              <dt className="uppercase tracking-[0.14em] text-ash">{k}</dt>
+              <dd className="text-right text-white/80">{v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </article>
+  );
+}
+
+
+export function Engineers() {
+  return (
+    <section id="engineers" className="relative bg-black py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-laser">
+              [ 05 — The engineers ]
+            </p>
+            <h2 className="mt-5 font-display text-4xl font-semibold leading-[1.02] tracking-hero text-white sm:text-6xl">
+              Built by systems architects.
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-ash">
+            VaultPrint is engineered by a two-person team obsessed with the seam between
+            physical hardware and cryptographic software. Not a slide deck — a working fleet.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-5 md:grid-cols-2">
+          {ENGINEERS.map((e) => (
+            <EngineerCard key={e.name} eng={e} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =====================================================================
+   SCENE 8 — FOOTER / THE FINAL COMMIT
+   Metallic clip-text headline; noise energizes on CTA hover.
+===================================================================== */
+export function Footer({ onEnergize }) {
+  const [, setHot] = useState(false);
+
+  return (
+    <footer
+      id="deploy-contact"
+      className="relative overflow-hidden border-t border-white/[0.06] bg-black pt-24"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-ash">
+              [ 06 — Deploy VaultPrint ]
+            </p>
+            <h2 className="metal-text mt-4 font-display text-[18vw] font-bold leading-[0.82] tracking-tighter2 lg:text-[13vw]">
+              Deploy
+              <br />
+              VaultPrint.
+            </h2>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col gap-6 border-t border-white/10 py-10 md:flex-row md:items-center md:justify-between">
+          <p className="max-w-md text-base leading-relaxed text-ash">
+            Talk to us about kiosk placement, purchase versus subscription, security review,
+            and fleet rollout for your campus, workspace, or enterprise.
+          </p>
+          <MagneticButton
+            as="a"
+            href="mailto:contact@vaultprintpvtltd.online"
+            sweep
+            strength={0.5}
+            onMouseEnter={() => {
+              setHot(true);
+              onEnergize?.(true);
+            }}
+            onMouseLeave={() => {
+              setHot(false);
+              onEnergize?.(false);
+            }}
+            className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-base font-semibold tracking-tight text-black transition-transform duration-500 ease-spring hover:scale-[1.03]"
+          >
+            Contact Sales
+            <ArrowUpRight className="h-5 w-5" />
+          </MagneticButton>
+        </div>
+
+        {/* Legal + meta rail */}
+        <div className="grid gap-8 border-t border-white/10 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/[0.03]">
+                <img src="/vaultprint-logo-mark.png" alt="" className="h-full w-full object-cover" />
+              </span>
+              <span className="font-display text-base font-semibold tracking-tight text-white">
+                VaultPrint
+              </span>
+            </div>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-ash">
+              Secure, AES-256 encrypted, zero-trace self-service print infrastructure.
+              Designed and operated for institutions that treat documents as liabilities.
+            </p>
+          </div>
+
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ash">Platform</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-white/70">
+              <li><a href="#hardware" className="hover:text-laser">Hardware</a></li>
+              <li><a href="#security" className="hover:text-laser">Security Model</a></li>
+              <li><a href="#deploy" className="hover:text-laser">Deployment</a></li>
+              <li><a href="#engineers" className="hover:text-laser">Engineers</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ash">Contact</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-white/70">
+              <li>
+                <a href="mailto:contact@vaultprintpvtltd.online" className="hover:text-laser">
+                  contact@vaultprintpvtltd.online
+                </a>
+              </li>
+              <li className="text-ash">BIT Mesra · Ranchi, IN</li>
+              <li className="text-ash">Mon–Sat · 09:00–19:00 IST</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-white/10 py-8 text-xs text-ash md:flex-row md:items-center md:justify-between">
+          <p>© 2026 VaultPrint Private Limited. All rights reserved.</p>
+          <p className="font-mono tracking-[0.14em]">
+            AES-256-GCM · TLS 1.3 · Hardware-attested boot · Data processed under contractual DPA.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
