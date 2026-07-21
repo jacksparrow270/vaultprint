@@ -4,23 +4,137 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
+
+    <!-- ============ PRIMARY SEO ============ -->
+    <title>VaultPrint — Secure Print Vault &amp; Encrypted Self-Service Print Kiosks</title>
     <meta
       name="description"
-      content="VaultPrint deploys secure, AES-256 encrypted, zero-trace self-service print infrastructure for campuses, workspaces, and enterprises. Printing infrastructure, finally in the 21st century."
+      content="VaultPrint is secure print infrastructure: AES-256 encrypted, zero-trace self-service print kiosks for campuses, workspaces, and enterprises. The modern print vault you own and can audit."
     />
-    <meta name="theme-color" content="#000000" />
+    <meta
+      name="keywords"
+      content="VaultPrint, Vault Print, vaultprint, print vault, secure print, secure printing, print kiosk, self-service printing, encrypted printing, AES-256 print, zero-trace printing, campus printing, enterprise print infrastructure, secure document output, print vault kiosk"
+    />
+    <meta name="author" content="VaultPrint" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://www.vaultprint.page/" />
+
+
+    <!-- ============ ICONS / THEME ============ -->
+    <meta name="theme-color" content="#02060b" />
+    <meta name="application-name" content="VaultPrint" />
+    <meta name="apple-mobile-web-app-title" content="VaultPrint" />
     <link rel="icon" type="image/png" href="/vaultprint-favicon-icon.png?v=3" />
     <link rel="apple-touch-icon" href="/vaultprint-favicon-icon.png?v=3" />
+
+    <!-- ============ OPEN GRAPH (Facebook / LinkedIn) ============ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VaultPrint" />
+    <meta property="og:title" content="VaultPrint — Secure Print Vault &amp; Encrypted Print Kiosks" />
+    <meta
+      property="og:description"
+      content="Secure print infrastructure: AES-256 encrypted, zero-trace self-service print kiosks for campuses, workspaces, and enterprises. The print vault you own and can audit."
+    />
+    <meta property="og:url" content="https://www.vaultprint.page/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://www.vaultprint.page/vaultprint-kiosk.png" />
+    <meta property="og:image:alt" content="VaultPrint secure print kiosk" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- ============ TWITTER / X CARDS ============ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VaultPrint — Secure Print Vault &amp; Encrypted Print Kiosks" />
+    <meta
+      name="twitter:description"
+      content="Secure print infrastructure: AES-256 encrypted, zero-trace self-service print kiosks. The print vault you own and can audit."
+    />
+    <meta name="twitter:image" content="https://www.vaultprint.page/vaultprint-kiosk.png" />
+    <meta name="twitter:image:alt" content="VaultPrint secure print kiosk" />
+
+
+    <!-- ============ FONTS ============ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>VaultPrint — Secure Print Infrastructure</title>
+
+    <!-- ============ STRUCTURED DATA (JSON-LD) ============
+         A single connected @graph so Google resolves the WebSite → Organization
+         relationship and displays "VaultPrint" as the Site Name (not the domain). -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.vaultprint.page/#website",
+            "name": "VaultPrint",
+            "alternateName": ["Vault Print", "Print Vault", "VaultPrint Pvt Ltd"],
+            "url": "https://www.vaultprint.page/",
+            "publisher": { "@id": "https://www.vaultprint.page/#organization" },
+            "inLanguage": "en",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://www.vaultprint.page/?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://www.vaultprint.page/#organization",
+            "name": "VaultPrint",
+            "alternateName": ["Vault Print", "Print Vault", "VaultPrint Pvt Ltd"],
+            "legalName": "VaultPrint Private Limited",
+            "url": "https://www.vaultprint.page/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.vaultprint.page/vaultprint-logo-mark.png",
+              "width": 512,
+              "height": 512
+            },
+            "image": "https://www.vaultprint.page/vaultprint-kiosk.png",
+            "description": "VaultPrint deploys AES-256 encrypted, zero-trace self-service print kiosks for campuses, workspaces, and enterprises.",
+            "slogan": "Printing infrastructure, finally in the 21st century.",
+            "foundingDate": "2025",
+            "sameAs": [
+
+              "https://www.linkedin.com/company/vaultprintpvtltd"
+            ]
+          },
+          {
+            "@type": "Product",
+            "@id": "https://www.vaultprint.page/#product",
+            "name": "VaultPrint Secure Print Kiosk",
+            "alternateName": ["Vault Print Kiosk", "Print Vault"],
+            "image": "https://www.vaultprint.page/vaultprint-kiosk.png",
+            "description": "AES-256 encrypted, zero-trace self-service print kiosk. Secure print infrastructure you own and can audit, with 99.98% uptime and sub-30-minute deployment.",
+            "brand": { "@id": "https://www.vaultprint.page/#organization" },
+            "category": "Secure Print Infrastructure"
+          }
+        ]
+      }
+    </script>
+
   </head>
   <body>
     <div id="root"></div>
+    <!-- Fallback content for crawlers before JS hydration -->
+    <noscript>
+      <h1>VaultPrint — Secure Print Vault &amp; Encrypted Self-Service Print Kiosks</h1>
+      <p>
+        VaultPrint is secure print infrastructure. We deploy AES-256 encrypted, zero-trace
+        self-service print kiosks for campuses, workspaces, and enterprises. VaultPrint is the
+        modern print vault you own and can audit — printing infrastructure, finally in the 21st
+        century.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
